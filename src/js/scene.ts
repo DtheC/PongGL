@@ -1,4 +1,4 @@
-import { Scene, Renderer, Camera, PerspectiveCamera, WebGLRenderer, Mesh, Object3D, Vector3, MeshBasicMaterial, PlaneBufferGeometry, DoubleSide } from "three";
+import { Scene, Renderer, Camera, PerspectiveCamera, WebGLRenderer, Mesh, Object3D, Vector3, MeshBasicMaterial, PlaneBufferGeometry, DoubleSide, Box3, BoxBufferGeometry } from "three";
 
 class PongScene {
   private _backgroundMesh: Mesh;
@@ -8,6 +8,7 @@ class PongScene {
   private _camera: Camera;
   private _renderer: Renderer;
   private _container: HTMLElement;
+  private _bounds: Array<Box3>;
   
   constructor() {}
 
@@ -24,6 +25,7 @@ class PongScene {
     this._container.appendChild(this._renderer.domElement);
 
     this.createBackground();
+    this.createBounds();
     this.addMesh(this._backgroundMesh);
   }
 
@@ -31,6 +33,31 @@ class PongScene {
     this._backgroundMaterial = new MeshBasicMaterial({ color: 0x5E9EFC, side: DoubleSide});
     this._backgroundGeometry = new PlaneBufferGeometry(20, 7, 1, 1);
     this._backgroundMesh = new Mesh(this._backgroundGeometry, this._backgroundMaterial);
+  }
+
+  private createBounds() {
+    this._bounds = [];
+    // let geom = new BoxBufferGeometry(2, 7, 3);
+    // let mesh = new Mesh(geom);
+    // // Left Side
+    // mesh.position.set(-10, 0 ,0);
+    // this.addMesh(mesh);
+    // this._bounds.push(new Box3().setFromObject(mesh));
+    // // Right Side
+    // mesh.position.set(10, 0, 0);
+    // this.addMesh(mesh);
+    // this._bounds.push(new Box3().setFromObject(mesh));
+ 
+    // Top Side
+    let geom = new BoxBufferGeometry(22, 1, 3);
+    let mesh = new Mesh(geom);
+    mesh.position.set(0, 3.5, 0);
+    this.addMesh(mesh);
+    this._bounds.push(new Box3().setFromObject(mesh));
+    //Bottom Side
+    mesh.position.set(0, -3.5,0);
+    this.addMesh(mesh);
+    this._bounds.push(new Box3().setFromObject(mesh));
   }
 
   public animate() {
@@ -57,6 +84,10 @@ class PongScene {
 
 	public get container(): HTMLElement {
 		return this._container;
+  }
+  
+	public get bounds(): Array<Box3> {
+		return this._bounds;
 	}
   
 }

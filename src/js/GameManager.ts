@@ -32,7 +32,7 @@ class PongGameManager {
     requestAnimationFrame(this.animate);
     this._pongScene.animate();
     for (let _ball of this._pongBalls) {
-      _ball.animate();
+      _ball.animate(this._pongBats, this._pongScene.bounds);
     }
     for (let _bat of this._pongBats) {
       _bat.animate();

@@ -9,7 +9,7 @@ class PongBat {
   private _velocity: Vector3 = new Vector3();
   private _acceleration: Vector3 = new Vector3();
   private _speed: number = 0.1;
-  private _collider: Box3;
+  private _collider: Box3 = new Box3();
 
   constructor() {
     this.upPressed = this.upPressed.bind(this);
@@ -21,6 +21,7 @@ class PongBat {
     this._material = new MeshBasicMaterial({color: _color});
     this._geometry = new BoxBufferGeometry(0.25, 1.5, 1);
     this._mesh = new Mesh(this._geometry, this._material);
+    this._location = new Vector3(8, 0, 0);
     this._collider.setFromObject(this._mesh);
 
     /** Event Listening */

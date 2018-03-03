@@ -1,4 +1,4 @@
-import { Material, Geometry, Mesh, Vector3, Color, MeshBasicMaterial, BoxBufferGeometry } from "three";
+import { Material, Geometry, Mesh, Vector3, Color, MeshBasicMaterial, BoxBufferGeometry, Box3 } from "three";
 import { PongInputEmitter } from "./InputManager";
 
 class PongBat {
@@ -9,6 +9,7 @@ class PongBat {
   private _velocity: Vector3 = new Vector3();
   private _acceleration: Vector3 = new Vector3();
   private _speed: number = 0.1;
+  private _collider: Box3;
 
   constructor() {
     this.upPressed = this.upPressed.bind(this);
@@ -20,13 +21,11 @@ class PongBat {
     this._material = new MeshBasicMaterial({color: _color});
     this._geometry = new BoxBufferGeometry(0.25, 1.5, 1);
     this._mesh = new Mesh(this._geometry, this._material);
+    this._collider.setFromObject(this._mesh);
 
     /** Event Listening */
     PongInputEmitter.on(PongInputEmitter.events.upPressed, this.upPressed);
     PongInputEmitter.on(PongInputEmitter.events.downPressed, this.downPressed);
-  
-    this.animate = this.animate.bind(this);
-    this.animate();
   }
 
   /** Input Functions */
@@ -39,19 +38,24 @@ class PongBat {
   }
 
   /** Animation Loop */
-  private animate() {
-    requestAnimationFrame(this.animate);
+  public animate() {
     // TODO: Check in natureofcode to figure out how to deal with drag
     this._velocity.add(this._acceleration).multiplyScalar(0.8);
     this._location.add(this._velocity);
     this._mesh.position.copy(this._location);
+    this._collider.setFromObject(this._mesh);
     this._acceleration = new Vector3();
   }
 
   /** Getters / Setters */
 	public get mesh(): Mesh {
 		return this._mesh;
-	}
+  }
+
+	public get collider(): Box3 {
+		return this._collider;
+  }
+
 }
 
 export {PongBat};

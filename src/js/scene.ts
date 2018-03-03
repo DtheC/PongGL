@@ -25,9 +25,6 @@ class PongScene {
 
     this.createBackground();
     this.addMesh(this._backgroundMesh);
-
-    this.animate = this.animate.bind(this);
-    this.animate();
   }
 
   private createBackground() {
@@ -36,8 +33,7 @@ class PongScene {
     this._backgroundMesh = new Mesh(this._backgroundGeometry, this._backgroundMaterial);
   }
 
-  private animate() {
-    requestAnimationFrame(this.animate);
+  public animate() {
     this._renderer.render(this._scene, this._camera);
   }
 

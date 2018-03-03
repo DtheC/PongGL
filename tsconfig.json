@@ -5,6 +5,7 @@
       "es2015",
       "es2015.iterable",
       "dom"
-    ]
+    ],
+    "target": "es5"
   }
 }

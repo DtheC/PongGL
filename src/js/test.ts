@@ -5,9 +5,3 @@ import { PongGameManager } from './GameManager';
 import { PongInputEmitter} from './InputManager';
 
 const pscene = new PongGameManager();
-
-PongInputEmitter.on(PongInputEmitter.events.mouseDown, mdown);
-
-function mdown(_event) {
-  console.log('down');
-}

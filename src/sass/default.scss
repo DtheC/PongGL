@@ -1,8 +1,10 @@
-body {
+html, body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
-.red {
-  color: red;
+canvas {
+  margin: 0;
+  padding: 0;
 }

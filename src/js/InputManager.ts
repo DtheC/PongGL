@@ -48,16 +48,16 @@ class PongInputEmitter extends events.EventEmitter  {
     this.emit(this.events.mouseDown, _event);
   }
   private emitUpPressed(_event: Event) {
-    this.emit(this.events.mouseDown, _event);
+    this.emit(this.events.upPressed, _event);
   }
   private emitDownPressed(_event: Event) {
-    this.emit(this.events.mouseDown, _event);
+    this.emit(this.events.downPressed, _event);
   }
   private emitLeftPressed(_event: Event) {
-    this.emit(this.events.mouseDown, _event);
+    this.emit(this.events.leftPressed, _event);
   }
   private emitRightPressed(_event: Event) {
-    this.emit(this.events.mouseDown, _event);
+    this.emit(this.events.rightPressed, _event);
   }
 }
 

@@ -1,4 +1,4 @@
-import { Scene, Renderer, Camera, PerspectiveCamera, WebGLRenderer, Mesh, Object3D, Vector3, MeshBasicMaterial, PlaneBufferGeometry, DoubleSide, Box3, BoxBufferGeometry } from "three";
+import { Scene, Renderer, Camera, PerspectiveCamera, WebGLRenderer, Mesh, Object3D, Vector3, MeshBasicMaterial, PlaneBufferGeometry, DoubleSide, Box3, BoxBufferGeometry, OrthographicCamera } from "three";
 
 class PongScene {
   private _backgroundMesh: Mesh;
@@ -15,7 +15,10 @@ class PongScene {
   init(_container?: HTMLElement) {
     this._container = _container || document.body;
     this._scene = new Scene();
-    this._camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // this._camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const aspect = window.innerWidth / window.innerHeight;
+    const width = 10;
+    this._camera = new OrthographicCamera(width * aspect / - 2, width * aspect / 2, width / 2, width / - 2, 1, 1000);
     this._renderer = new WebGLRenderer();
 
     this._camera.position.set(0, 0, 5);
@@ -52,11 +55,9 @@ class PongScene {
     let geom = new BoxBufferGeometry(22, 1, 3);
     let mesh = new Mesh(geom);
     mesh.position.set(0, 3.5, 0);
-    this.addMesh(mesh);
     this._bounds.push(new Box3().setFromObject(mesh));
     //Bottom Side
     mesh.position.set(0, -3.5,0);
-    this.addMesh(mesh);
     this._bounds.push(new Box3().setFromObject(mesh));
   }
 

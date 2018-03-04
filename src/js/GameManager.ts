@@ -15,18 +15,37 @@ class PongGameManager {
     this._pongScene = new PongScene();
     this._pongScene.init();
 
-    const playerControls = { up: 38, down: 40 };
+    const p1Settings = {
+      id: 0,
+      controls: { up: 38, down: 40 },
+      batLocation: new Vector3(8, 0, 0),
+      scoreBox: {
+        corners: [new Vector3(-10, 3.5, -1), new Vector3(-8.5, -3.5, 1)]
+      },
+      color: new Color(0.8, 0.5, 0.1)
+    }
+
     const player1 = new PongPlayer();
-    player1.init(0, playerControls, new Vector3(8, 0, 0));
+    player1.init(p1Settings);
     this._pongPlayers.push(player1);
     this._pongScene.addMesh(player1.bat.mesh);
+    this._pongScene.addMesh(player1.scoreDisplay.mesh);
 
-    playerControls.up = 81;
-    playerControls.down = 90;
+    const p2Settings = {
+      id: 1,
+      controls: { up: 81, down: 90 },
+      batLocation: new Vector3(-8, 0, 0),
+      scoreBox: {
+        corners: [new Vector3(10, 3.5, -1), new Vector3(8.5, -3.5, 1)]
+      },
+      color: new Color(0.1, 0.8, 0.5)
+    }
+
     const player2 = new PongPlayer();
-    player2.init(1, playerControls, new Vector3(-8, 0, 0));
+    player2.init(p2Settings);
     this._pongPlayers.push(player2);
     this._pongScene.addMesh(player2.bat.mesh);
+    this._pongScene.addMesh(player2.scoreDisplay.mesh);
     
     const ball1 = new PongBall();
     ball1.init();
@@ -41,7 +60,7 @@ class PongGameManager {
     requestAnimationFrame(this.animate);
     this._pongScene.animate();
     for (let _ball of this._pongBalls) {
-      _ball.animate(this.pongBats, this._pongScene.bounds);
+      _ball.animate(this._pongPlayers, this.pongBats, this._pongScene.bounds);
     }
     for (let _player of this._pongPlayers) {
       _player.animate();

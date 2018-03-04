@@ -4,6 +4,7 @@ class PongInputEmitter extends events.EventEmitter  {
 
   public events = {
     mouseDown: 'mousedown',
+    keyDown: 'keydown',
     upPressed: 'uppressed',
     downPressed: 'downpressed',
     leftPressed: 'leftpressed',
@@ -18,6 +19,7 @@ class PongInputEmitter extends events.EventEmitter  {
     this.emitDownPressed = this.emitDownPressed.bind(this);
     this.emitLeftPressed = this.emitLeftPressed.bind(this);
     this.emitRightPressed = this.emitRightPressed.bind(this);
+    this.emitKeyDown = this.emitKeyDown.bind(this);
     this.keyDown = this.keyDown.bind(this);
 
     document.addEventListener('mousedown', this.emitMouseDown);
@@ -42,20 +44,29 @@ class PongInputEmitter extends events.EventEmitter  {
       default:
         break;
     }
+    this.emitKeyDown(_event);
   }
 
   private emitMouseDown(_event: Event) {
     this.emit(this.events.mouseDown, _event);
   }
+
+  private emitKeyDown(_event: KeyboardEvent) {
+    this.emit(this.events.keyDown, _event);
+  }
+
   private emitUpPressed(_event: Event) {
     this.emit(this.events.upPressed, _event);
   }
+  
   private emitDownPressed(_event: Event) {
     this.emit(this.events.downPressed, _event);
   }
+  
   private emitLeftPressed(_event: Event) {
     this.emit(this.events.leftPressed, _event);
   }
+  
   private emitRightPressed(_event: Event) {
     this.emit(this.events.rightPressed, _event);
   }

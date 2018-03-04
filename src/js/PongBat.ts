@@ -1,5 +1,7 @@
 import { Material, Geometry, Mesh, Vector3, Color, MeshBasicMaterial, BoxBufferGeometry, Box3 } from "three";
 import { PongInputEmitter } from "./InputManager";
+import { PongPlayerControls } from "./PongPlayerControls";
+import { ControlScheme } from "./PongInterfaces";
 
 class PongBat {
   private _material: Material;
@@ -10,31 +12,34 @@ class PongBat {
   private _acceleration: Vector3 = new Vector3();
   private _speed: number = 0.1;
   private _collider: Box3 = new Box3();
+  private _controls: PongPlayerControls = new PongPlayerControls();
 
   constructor() {
     this.upPressed = this.upPressed.bind(this);
     this.downPressed = this.downPressed.bind(this);
   }
 
-  public init(_playerNumber: number, _color: Color) {
+  public init(_color: Color, _controls: ControlScheme, _location: Vector3) {
     /** Init Mesh */
     this._material = new MeshBasicMaterial({color: _color});
     this._geometry = new BoxBufferGeometry(0.25, 1.5, 1);
     this._mesh = new Mesh(this._geometry, this._material);
-    this._location = new Vector3(8, 0, 0);
+    this._location = _location.clone();
     this._collider.setFromObject(this._mesh);
 
+    this._controls.setControls(_controls);
+
     /** Event Listening */
-    PongInputEmitter.on(PongInputEmitter.events.upPressed, this.upPressed);
-    PongInputEmitter.on(PongInputEmitter.events.downPressed, this.downPressed);
+    this._controls.on(this._controls.events.upPressed, this.upPressed);
+    this._controls.on(this._controls.events.downPressed, this.downPressed);
   }
 
   /** Input Functions */
-  private upPressed(_event: Event) {
+  private upPressed() {
     this._acceleration.add(new Vector3(0, this._speed, 0));
   }
 
-  private downPressed(_event: Event) {
+  private downPressed() {
     this._acceleration.add(new Vector3(0, -this._speed, 0));
   }
 

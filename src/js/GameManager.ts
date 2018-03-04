@@ -1,24 +1,33 @@
-import { BoxGeometry, MeshBasicMaterial, Mesh, Geometry, Material, Color } from "three";
+import { BoxGeometry, MeshBasicMaterial, Mesh, Geometry, Material, Color, Vector3 } from "three";
 import { PongScene } from "./scene";
 import { PongBat } from "./PongBat";
 import { PongBall } from "./PongBall";
+import { PongPlayer } from "./PongPlayer";
 
 class PongGameManager {
   private _pongScene: PongScene;
-  private _pongBats: Array<PongBat>;
   private _pongBalls: Array<PongBall>;
+  private _pongPlayers: Array<PongPlayer>;
   constructor() {
-    this._pongBats = [];
     this._pongBalls = [];
+    this._pongPlayers = [];
 
     this._pongScene = new PongScene();
     this._pongScene.init();
 
-    const bat1 = new PongBat();
-    bat1.init(0, new Color(0xffffff));
-    this._pongScene.addMesh(bat1.mesh);
-    this._pongBats.push(bat1);
+    const playerControls = { up: 38, down: 40 };
+    const player1 = new PongPlayer();
+    player1.init(0, playerControls, new Vector3(8, 0, 0));
+    this._pongPlayers.push(player1);
+    this._pongScene.addMesh(player1.bat.mesh);
 
+    playerControls.up = 81;
+    playerControls.down = 90;
+    const player2 = new PongPlayer();
+    player2.init(1, playerControls, new Vector3(-8, 0, 0));
+    this._pongPlayers.push(player2);
+    this._pongScene.addMesh(player2.bat.mesh);
+    
     const ball1 = new PongBall();
     ball1.init();
     this._pongScene.addMesh(ball1.mesh);
@@ -32,12 +41,17 @@ class PongGameManager {
     requestAnimationFrame(this.animate);
     this._pongScene.animate();
     for (let _ball of this._pongBalls) {
-      _ball.animate(this._pongBats, this._pongScene.bounds);
+      _ball.animate(this.pongBats, this._pongScene.bounds);
     }
-    for (let _bat of this._pongBats) {
-      _bat.animate();
+    for (let _player of this._pongPlayers) {
+      _player.animate();
     }
   }
+
+  /** Getters & Setters */
+	public get pongBats(): Array<PongBat> {
+		return this._pongPlayers.map(x => x.bat);
+	}
 }
 
 export {PongGameManager};

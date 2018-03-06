@@ -1,12 +1,14 @@
-import { Scene, Renderer, Camera, PerspectiveCamera, WebGLRenderer, Mesh, Object3D, Vector3, MeshBasicMaterial, PlaneBufferGeometry, DoubleSide, Box3, BoxBufferGeometry, OrthographicCamera } from "three";
+import { Scene, Renderer, Camera, PerspectiveCamera, WebGLRenderer, Mesh, Object3D, Vector3, MeshBasicMaterial, PlaneBufferGeometry, DoubleSide, Box3, BoxBufferGeometry, OrthographicCamera, Light, PointLight, Material, PCFSoftShadowMap } from "three";
+import { PongGlobals } from "./PongGlobals";
 
 class PongScene {
   private _backgroundMesh: Mesh;
   private _backgroundGeometry: PlaneBufferGeometry;
-  private _backgroundMaterial: MeshBasicMaterial;
+  private _backgroundMaterial: Material;
   private _scene: Scene;
   private _camera: Camera;
   private _renderer: Renderer;
+  private _light: Light;
   private _container: HTMLElement;
   private _bounds: Array<Box3>;
   
@@ -20,6 +22,13 @@ class PongScene {
     const width = 10;
     this._camera = new OrthographicCamera(width * aspect / - 2, width * aspect / 2, width / 2, width / - 2, 1, 1000);
     this._renderer = new WebGLRenderer();
+    this._renderer.shadowMap.enabled = true;
+    this._renderer.shadowMap.type = PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+    this._light = new PointLight(0xffffff, 1, 0, 2);
+    this._light.castShadow = true;
+    this._light.position.set(0, 0, 2);
+    this._scene.add(this._light);
 
     this._camera.position.set(0, 0, 5);
     this._camera.lookAt(new Vector3(0, 0, 0));
@@ -33,9 +42,10 @@ class PongScene {
   }
 
   private createBackground() {
-    this._backgroundMaterial = new MeshBasicMaterial({ color: 0x5E9EFC, side: DoubleSide});
+    this._backgroundMaterial = PongGlobals.GroundMaterial();
     this._backgroundGeometry = new PlaneBufferGeometry(20, 7, 1, 1);
     this._backgroundMesh = new Mesh(this._backgroundGeometry, this._backgroundMaterial);
+    this._backgroundMesh.receiveShadow = true;
   }
 
   private createBounds() {

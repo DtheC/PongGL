@@ -16,7 +16,6 @@ class PongScoreDisplay {
     this._canvas.height = 512;
     this._canvas.width = 512;
     this._ctx = this._canvas.getContext('2d');
-    this._ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
 
     this._geometry = new PlaneBufferGeometry(3, 3);
     this._material = new MeshBasicMaterial({map: new Texture(this._canvas), transparent: true});
@@ -29,6 +28,7 @@ class PongScoreDisplay {
   public updateScore(_score: number) {
     this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
     this._ctx.font = "200px 'Source Code Pro', monospace";
+    this._ctx.fillStyle = 'white';
     this._ctx.textAlign = "center";
     this._ctx.fillText(_score.toString(), this._canvas.width / 2, this._canvas.height / 2);
     this._material.map.needsUpdate = true;

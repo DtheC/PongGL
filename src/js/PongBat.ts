@@ -2,6 +2,7 @@ import { Material, Geometry, Mesh, Vector3, Color, MeshBasicMaterial, BoxBufferG
 import { PongInputEmitter } from "./InputManager";
 import { PongPlayerControls } from "./PongPlayerControls";
 import { ControlScheme } from "./PongInterfaces";
+import { PongGlobals } from "./PongGlobals";
 
 class PongBat {
   private _material: Material;
@@ -21,9 +22,10 @@ class PongBat {
 
   public init(_color: Color, _controls: ControlScheme, _location: Vector3) {
     /** Init Mesh */
-    this._material = new MeshBasicMaterial({color: _color});
+    this._material = PongGlobals.BatMaterial(_color);
     this._geometry = new BoxBufferGeometry(0.25, 1.5, 1);
     this._mesh = new Mesh(this._geometry, this._material);
+    this._mesh.castShadow = true;
     this._location = _location.clone();
     this._collider.setFromObject(this._mesh);
 

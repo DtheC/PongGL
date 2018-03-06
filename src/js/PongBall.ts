@@ -1,6 +1,7 @@
 import { Material, Geometry, Mesh, Vector3, Color, MeshBasicMaterial, BoxBufferGeometry, SphereBufferGeometry, Sphere, Box3 } from "three";
 import { PongBat } from "./PongBat";
 import { PongPlayer } from "./PongPlayer";
+import { PongGlobals } from "./PongGlobals";
 
 class PongBall {
   private _material: Material;
@@ -15,9 +16,10 @@ class PongBall {
   constructor() {}
 
   public init() {
-    this._material = new MeshBasicMaterial({ color: 0xff00ff });
+    this._material = PongGlobals.BallMaterial();
     this._geometry = new SphereBufferGeometry(0.2);
     this._mesh = new Mesh(this._geometry, this._material);
+    this._mesh.castShadow = true;
     this._mesh.position.set(0, 0, 0);
     this._collider = new Sphere(this._location, 0.2);
     this._speed = this.getRandomSpeed();
@@ -32,8 +34,9 @@ class PongBall {
   }
 
   private getRandomSpeed(): Vector3 {
-    const y = Math.random() > 0.5? 0.01 : 0.01;
-    return new Vector3(Math.random() * 0.1 - 0.05, y, 0);
+    const y = Math.random() > 0.5? -0.0001 : 0.0001;
+    const x = Math.random() > 0.5? -0.0001 : 0.0001;
+    return new Vector3(x, y, 0);
   }
 
   /** Animation Loop */
@@ -61,7 +64,7 @@ class PongBall {
         }
       }
       this._velocity.add(this._speed);
-      this.limitVector(this._velocity, 0.1);
+      this.limitVector(this._velocity, 0.5);
       this._location.add(this._velocity);
       this._collider = new Sphere(this._location, 0.2);
       this._mesh.position.copy(this._location);
